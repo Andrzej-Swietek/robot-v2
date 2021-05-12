@@ -1,0 +1,55 @@
+$shadow: 0px 0px 10px rgba(0, 0, 0, 0.56);
+$bg: rgba(33,33,33,.5);
+$txt: #fff;
+$arrow: lighten($color: $bg, $amount: 10%);
+
+@mixin df($dir,$wrap, $xPos: center ,$yPos: center){
+  display: flex;
+  align-items: $yPos;
+  justify-content: $xPos;
+  flex-flow: $dir $wrap;
+}
+
+@mixin classicHover($color){
+  transition: .5s;
+  &:hover{
+    background-color: darken($color,30%);
+  }
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    @include df(row, wrap, center, space-around);
+    align-items: baseline;
+    align-content: center;
+    background: $bg;
+    width: 100%;
+    height: 100vh;
+}
+.row {
+    margin: 0; padding: 0;
+    @include df(row, wrap);
+    width: 100%;
+    height: auto;
+
+    .arrow {
+        cursor: pointer;
+        @include df(row, wrap);
+        padding: 1rem; margin: 1rem;
+        width: 100px;
+        height: 100px;
+        color: $txt;
+        border-radius: 50%;
+        background: $arrow;
+        box-shadow: $shadow;
+        font-size: 3rem;
+        &:hover {
+            @include classicHover($arrow);
+        }
+    }
+}
