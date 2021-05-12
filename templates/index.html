@@ -12,12 +12,16 @@
 
 </head>
 <body>
-    <div class="camera"></div>
+    <div class="camera">
+      <img src="https://data.1freewallpapers.com/detail/fantasy-artwork-painting-4k-vaporwave.jpg" alt="" id="cameraView">
+      <div class="grid-cont"></div>
+    </div>
     <div class="controls">
-        <div class="row">                   <div class="arrow up"><i class="fas fa-arrow-up"></i></div>                   </div>            
-        <div class="row">           <div class="arrow left"><i class="fas fa-arrow-left"></i></div><div class="arrow stop"><i class="fas fa-stop"></i></div> <div class="arrow right"><i class="fas fa-arrow-right"></i></div>    </div>     
-        <div class="row">                   <div class="arrow back"><i class="fas fa-arrow-down"></i></div>               </div> 
-        <div class="row">
+        <div class="row">           <div class="arrow upLeft"><i class="fas fa-reply"></i></div>        <div class="arrow up">   <i class="fas fa-arrow-up"></i></div>   <div class="arrow upRight"> <i class="fas fa-share">      </i></div>    </div>            
+        <div class="row">           <div class="arrow left">  <i class="fas fa-arrow-left"></i></div>   <div class="arrow stop"> <i class="fas fa-stop"></i>    </div>   <div class="arrow right">   <i class="fas fa-arrow-right"></i></div>    </div>     
+        <div class="row">           <div class="arrow downLeft"><i class="fas fa-reply"></i></div>       <div class="arrow back"><i class="fas fa-arrow-down"></i></div> <div class="arrow downRight"><i class="fas fa-share"></i></div> </div>               
+      
+        <div class="row m-t-10">
             <form class="range">
                 <div class="form-group range__slider">
                   <input type="range" step="1">
@@ -71,6 +75,22 @@
         slider2.init()
     //   }
 
+
+
+      const addGid = () => {
+        let cameraContainer = document.querySelector('.grid-cont');
+        let cameraCont_w = parseInt ( window.getComputedStyle(cameraContainer).width );
+        for (let i = 0; i < 100; i++) {
+            let div = document.createElement('div');
+            div.classList.add('camera-grid-element');
+            
+            div.style.width =  cameraCont_w/10 - 10 + "px";
+            div.style.height = cameraCont_w/10 - 10 + "px";
+
+            console.log(div.style.width);
+            cameraContainer.append(div);
+        }
+      }
       </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

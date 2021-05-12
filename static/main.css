@@ -1,3 +1,159 @@
+.m-0 {
+  margin: 0rem !important;
+}
+
+.m-1 {
+  margin: 1rem !important;
+}
+
+.m-2 {
+  margin: 2rem !important;
+}
+
+.m-3 {
+  margin: 3rem !important;
+}
+
+.m-4 {
+  margin: 4rem !important;
+}
+
+.m-5 {
+  margin: 5rem !important;
+}
+
+.w-0 {
+  width: 0% !important;
+}
+
+.w-10 {
+  width: 10% !important;
+}
+
+.w-20 {
+  width: 20% !important;
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.w-40 {
+  width: 40% !important;
+}
+
+.w-50 {
+  width: 50% !important;
+}
+
+.w-60 {
+  width: 60% !important;
+}
+
+.w-70 {
+  width: 70% !important;
+}
+
+.w-80 {
+  width: 80% !important;
+}
+
+.w-90 {
+  width: 90% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.m-b-0 {
+  margin-bottom: 0rem !important;
+}
+
+.m-b-1 {
+  margin-bottom: 0.5rem !important;
+}
+
+.m-b-2 {
+  margin-bottom: 1rem !important;
+}
+
+.m-b-3 {
+  margin-bottom: 1.5rem !important;
+}
+
+.m-b-4 {
+  margin-bottom: 2rem !important;
+}
+
+.m-b-5 {
+  margin-bottom: 2.5rem !important;
+}
+
+.m-b-6 {
+  margin-bottom: 3rem !important;
+}
+
+.m-b-7 {
+  margin-bottom: 3.5rem !important;
+}
+
+.m-b-8 {
+  margin-bottom: 4rem !important;
+}
+
+.m-b-9 {
+  margin-bottom: 4.5rem !important;
+}
+
+.m-b-10 {
+  margin-bottom: 5rem !important;
+}
+
+.m-t-0 {
+  margin-top: 0rem !important;
+}
+
+.m-t-1 {
+  margin-top: 0.5rem !important;
+}
+
+.m-t-2 {
+  margin-top: 1rem !important;
+}
+
+.m-t-3 {
+  margin-top: 1.5rem !important;
+}
+
+.m-t-4 {
+  margin-top: 2rem !important;
+}
+
+.m-t-5 {
+  margin-top: 2.5rem !important;
+}
+
+.m-t-6 {
+  margin-top: 3rem !important;
+}
+
+.m-t-7 {
+  margin-top: 3.5rem !important;
+}
+
+.m-t-8 {
+  margin-top: 4rem !important;
+}
+
+.m-t-9 {
+  margin-top: 4.5rem !important;
+}
+
+.m-t-10 {
+  margin-top: 5rem !important;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -26,7 +182,7 @@ body {
 }
 
 .camera {
-  width: 40%;
+  width: 50%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: -webkit-box;
@@ -42,8 +198,46 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-flow: row wrap;
           flex-flow: row wrap;
+  position: relative;
+}
+
+.camera .grid-cont {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.56);
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.56);
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto auto auto auto auto auto auto auto;
+      grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+  -ms-grid-rows: auto auto auto auto auto auto auto auto auto auto;
+      grid-template-rows: auto auto auto auto auto auto auto auto auto auto;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  top: 0;
+  left: 0;
+}
+
+.camera .grid-cont .camera-grid-element {
+  width: 50px;
+  height: 50px;
+  border: azure 1px solid;
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.56);
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.56);
+}
+
+.camera #cameraView {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  top: 0;
+  left: 0;
 }
 
 .controls {
@@ -130,7 +324,6 @@ body {
   display: -ms-flexbox;
   display: flex;
   width: 600px;
-  margin: 3rem 0;
 }
 
 .range__slider {
@@ -222,5 +415,11 @@ body {
 /* remove border */
 input::-moz-focus-inner, input::-moz-focus-outer {
   border: 0;
+}
+
+.downLeft,
+.downRight {
+  -webkit-transform: rotateX(180deg);
+          transform: rotateX(180deg);
 }
 /*# sourceMappingURL=main.css.map */
