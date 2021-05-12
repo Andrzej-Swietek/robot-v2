@@ -7,7 +7,7 @@ import os
 # GPIO.setwarnings(False)
 
 from flask import Flask, redirect, url_for, request, render_template
-
+from flask_socketio import SocketIO, send
 #set GPIO numbering mode and define output pins
 # GPIO.setmode(GPIO.BOARD)
 
@@ -104,8 +104,13 @@ from flask import Flask, redirect, url_for, request, render_template
 
 
 app = Flask(__name__)
-# app = Flask(__name__, template_folder='template', static_folder='static')
+app.config['SECRET_KEY'] = 'zaq1@WSX'
+socketio = SocketIO(app,cors_allowed_origins='*')
 
+@socketio.on('message')
+def message(msg):
+    print('Message : '+ msg)
+    send(msg, broadcast=True)
 
 @app.route('/', methods=["GET"])
 def client():
@@ -114,4 +119,5 @@ def client():
 
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    socketio.run(app)

@@ -7,13 +7,71 @@
     <title>ROBOT ZSŁ V2 - Client</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
 
 </head>
 <body>
-    <div class="row">                   <div class="arrow up"><i class="fas fa-arrow-up"></i></div>                   </div>            
-    <div class="row">           <div class="arrow up"><i class="fas fa-arrow-left"></i></div><div class="arrow stop"><i class="fas fa-stop"></i></div> <div class="arrow up"><i class="fas fa-arrow-right"></i></div>    </div>     
-    <div class="row">                   <div class="arrow bottom"><i class="fas fa-arrow-down"></i></div>               </div> 
+    <div class="camera"></div>
+    <div class="controls">
+        <div class="row">                   <div class="arrow up"><i class="fas fa-arrow-up"></i></div>                   </div>            
+        <div class="row">           <div class="arrow left"><i class="fas fa-arrow-left"></i></div><div class="arrow stop"><i class="fas fa-stop"></i></div> <div class="arrow right"><i class="fas fa-arrow-right"></i></div>    </div>     
+        <div class="row">                   <div class="arrow back"><i class="fas fa-arrow-down"></i></div>               </div> 
+        <div class="row">
+            <form class="range">
+                <div class="form-group range__slider">
+                  <input type="range" step="1">
+                </div>
+                <div class="form-group range__value">
+                  <label>Motor Speed</label>
+                  <span></span>            
+                </div>
+              </form>
+        </div>
+        <div class="row">
+            <form class="range">
+                <div class="form-group range__slider">
+                  <input type="range" step="1" id="slider2">
+                </div>
+                <div class="form-group range__value">
+                  <label>Inna Wrtość</label>
+                  <span id="slider2-value"></span>            
+                </div>
+              </form>
+        </div>
 
-    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
+    </div>
+       <script src="{{ url_for('static', filename='js/Slider.js') }}"></script>
+    <script>
+
+
+// ===== SLIDER INITS =====
+
+      let rangeElement = document.querySelector('.range [type="range"]'); // .range [type="range"]
+      let valueElement = document.querySelector('.range .range__value span') // .range .range__value span
+      
+
+      
+      let options = {
+        min: 0,
+        max: 200,
+        cur: 100
+      }
+      
+      if (rangeElement) {
+        let slider1 = new Slider(rangeElement, valueElement, options)
+        slider1.init()
+      }
+
+      let rangeElement2 = document.querySelector('.range [type="range"]#slider2'); // .range [type="range"]
+      let valueElement2 = document.querySelector('.range .range__value #slider2-value') // .range .range__value span
+      
+    //   if (rangeElement2) {
+        let slider2 = new Slider(rangeElement2, valueElement2, options)
+        slider2.init()
+    //   }
+
+      </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
