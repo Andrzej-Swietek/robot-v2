@@ -10,6 +10,7 @@ from flask import Flask, redirect, url_for, request, render_template
 from flask_socketio import SocketIO, send
 #set GPIO numbering mode and define output pins
 # GPIO.setmode(GPIO.BOARD)
+from robot import Robot
 
 # motor1a = 7
 # motor1b = 11
@@ -106,11 +107,48 @@ from flask_socketio import SocketIO, send
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'zaq1@WSX'
 socketio = SocketIO(app,cors_allowed_origins='*')
+robot = Robot()
 
 @socketio.on('message')
 def message(msg):
     print('Message : '+ msg)
     send(msg, broadcast=True)
+    if msg == 'up':
+        # GPIO.output(motor1a,GPIO.HIGH)
+        # GPIO.output(motor1b,GPIO.LOW)
+        # GPIO.output(motor2a,GPIO.LOW)
+        # GPIO.output(motor2b,GPIO.HIGH)
+        robot.goStreight()
+        
+    elif msg == 'back':
+        # GPIO.output(motor1a,GPIO.LOW)
+        # GPIO.output(motor1b,GPIO.HIGH)
+        # GPIO.output(motor2a,GPIO.HIGH)
+        # GPIO.output(motor2b,GPIO.LOW)
+        robot.goBackwards()
+
+    elif msg == 'right':
+        # GPIO.output(motor1a,GPIO.HIGH)
+        # GPIO.output(motor1b,GPIO.LOW)
+        # GPIO.output(motor2a,GPIO.HIGH)
+        # GPIO.output(motor2b,GPIO.LOW)
+        robot.turnRight()
+
+    elif msg == 'left':
+        # GPIO.output(motor1a,GPIO.LOW)
+        # GPIO.output(motor1b,GPIO.HIGH)
+        # GPIO.output(motor2a,GPIO.LOW)
+        # GPIO.output(motor2b,GPIO.HIGH)
+        robot.turnLeft()
+
+    elif msg == 'stop':
+        # GPIO.output(21, True)
+        # pwm.ChangeDutyCycle(0)
+        # GPIO.output(motor1a,GPIO.LOW)
+        # GPIO.output(motor1b,GPIO.LOW)
+        # GPIO.output(motor2a,GPIO.LOW)
+        # GPIO.output(motor2b,GPIO.LOW)
+        robot.stop()
 
 @app.route('/', methods=["GET"])
 def client():
@@ -121,3 +159,5 @@ def client():
 if __name__ == '__main__':
     # app.run()
     socketio.run(app)
+    while True:
+        pass
