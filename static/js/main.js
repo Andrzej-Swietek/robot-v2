@@ -1,7 +1,9 @@
 window.addEventListener('DOMContentLoaded', () => {
     const IP = '192.168.43.101';
-    const socket = io.connect(`http://${IP}:5000`);
-
+    const socketAddress = `http://${IP}:5000`;
+    console.log(socketAddress)
+    const socket = io.connect(socketAddress);
+    
     socket.on('connect', function () {
         socket.send('User has connected!');
     });

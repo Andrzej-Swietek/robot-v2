@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send
-from robot import Robot
+#from robot import Robot
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
@@ -12,10 +12,10 @@ class Motor:
         self.ena = en
         self.in1 = in1
         self.in2 = in2
-        GPIO.setup(en, GPIO.out)
-        GPIO.setup(in1, GPIO.out)
-        GPIO.setup(in2, GPIO.out)
-        self.pwm = GPIO.pwm(self.ena, 100)
+        GPIO.setup(en, GPIO.OUT)
+        GPIO.setup(in1, GPIO.OUT)
+        GPIO.setup(in2, GPIO.OUT)
+        self.pwm = GPIO.PWM(self.ena, 100)
         self.pwm.start(0)
 
     def move_forward(self, speed=100):
@@ -51,10 +51,12 @@ def message(msg):
     print('Message : ' + msg)
     send(msg, broadcast=True)
     if msg == 'up':
+        print('UP')
         motor_a.move_forward()
         motor_b.move_forward()
 
     elif msg == 'back':
+        print('BACK')
         motor_a.move_backward()
         motor_b.move_backward()
 
@@ -77,5 +79,5 @@ def client():
 
 
 if __name__ == '__main__':
-    # app.run()
-    socketio.run(app, host=IP_ADDRESS,port=PORT)
+    #app.run()
+    socketio.run(app,host=IP_ADDRESS,port=PORT)
