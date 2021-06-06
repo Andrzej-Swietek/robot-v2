@@ -1,163 +1,81 @@
-# import curses and GPIO
-# import curses
-# import RPi.GPIO as GPIO
-# from mpu6050 import mpu6050
-import time
-import os
-# GPIO.setwarnings(False)
-
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, render_template
 from flask_socketio import SocketIO, send
-#set GPIO numbering mode and define output pins
-# GPIO.setmode(GPIO.BOARD)
 from robot import Robot
+import RPi.GPIO as GPIO
 
-# motor1a = 7
-# motor1b = 11
-# mpu = mpu6050(0x68)
-# motor2a = 13
-# motor2b = 16
-# GPIO.cleanup()
-# GPIO.setup(motor1a,GPIO.OUT)
-# GPIO.setup(motor1b,GPIO.OUT)
-# GPIO.setup(motor2a,GPIO.OUT)
-# GPIO.setup(motor2b,GPIO.OUT)
-# GPIO.setup(21, GPIO.OUT)
-# pwm=GPIO.PWM(21, 50)
-# pwm.start(0)
-# def SetAngle(angle):
-        # duty = angle / 18 + 2
-        # GPIO.output(21, True)
-        # pwm.ChangeDutyCycle(duty)
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-# Get the curses window, turn off echoing of keyboard to screen, turn on
-# instant (no waiting) key response, and use special values for cursor keys
-# screen = curses.initscr()
-# curses.noecho()
-# curses.cbreak()
-# curses.halfdelay(3)
-# screen.keypad(True)
-# GPIO.output(motor1a,GPIO.LOW)
-# GPIO.output(motor1b,GPIO.LOW)
-# GPIO.output(motor2a,GPIO.LOW)
-# GPIO.output(motor2b,GPIO.LOW)
 
-# SetAngle(90)
-# try:
-#         while True:
-#                 os.system('clear')
-#                 print("Temp : "+str(round(mpu.get_temp(),2)))
+class Motor:
+    def __init__(self, en, in1, in2):
+        self.ena = en
+        self.in1 = in1
+        self.in2 = in2
+        GPIO.setup(en, GPIO.out)
+        GPIO.setup(in1, GPIO.out)
+        GPIO.setup(in2, GPIO.out)
+        self.pwm = GPIO.pwm(self.ena, 100)
+        self.pwm.start(0)
 
-#                 accel_data = mpu.get_accel_data()
-#                 print("Acc X : "+str(round(accel_data['x'],2)))
-#                 print("Acc Y : "+str(round(accel_data['y'],2)))
-#                 print("Acc Z : "+str(round(accel_data['z'],2)))
+    def move_forward(self, speed=100):
+        GPIO.output(self.in1, GPIO.LOW)
+        GPIO.output(self.in2, GPIO.HIGH)
+        self.pwm.ChangeDutyCycle(speed)
 
-#                 gyro_data = mpu.get_gyro_data()
-#                 print("Gyro X : "+str(round(gyro_data['x'],2)))
-#                 print("Gyro Y : "+str(round(gyro_data['y'],2)))
-#                 print("Gyro Z : "+str(round(gyro_data['z'],2)))
-#                 time.sleep(0.1)
-#                 char = screen.getch()
-#                 oldChar = char
-#                 if char == ord('q'):
-#                         break
-#                 elif char == curses.KEY_RIGHT:
-#                         GPIO.output(motor1a,GPIO.HIGH)
-#                         GPIO.output(motor1b,GPIO.LOW)
-#                         GPIO.output(motor2a,GPIO.HIGH)
-#                         GPIO.output(motor2b,GPIO.LOW)
-#                 elif char == ord('a'):
-#                         SetAngle(180)
-#                 elif char == ord('d'):
-#                         SetAngle(0)
-#                 elif char == ord('s'):
-#                         SetAngle(90)
-#                 elif char == curses.KEY_LEFT:
-#                         GPIO.output(motor1a,GPIO.LOW)
-#                         GPIO.output(motor1b,GPIO.HIGH)
-#                         GPIO.output(motor2a,GPIO.LOW)
-#                         GPIO.output(motor2b,GPIO.HIGH)
-#                 elif char == curses.KEY_UP:
-#                         GPIO.output(motor1a,GPIO.HIGH)
-#                         GPIO.output(motor1b,GPIO.LOW)
-#                         GPIO.output(motor2a,GPIO.LOW)
-#                         GPIO.output(motor2b,GPIO.HIGH)
-#                 elif char == curses.KEY_DOWN:
-#                         GPIO.output(motor1a,GPIO.LOW)
-#                         GPIO.output(motor1b,GPIO.HIGH)
-#                         GPIO.output(motor2a,GPIO.HIGH)
-#                         GPIO.output(motor2b,GPIO.LOW)
-#                 else:
-#                         GPIO.output(21, True)
-#                         pwm.ChangeDutyCycle(0)
-#                         GPIO.output(motor1a,GPIO.LOW)
-#                         GPIO.output(motor1b,GPIO.LOW)
-#                         GPIO.output(motor2a,GPIO.LOW)
-#                         GPIO.output(motor2b,GPIO.LOW)
-# finally:
-#     #Close down curses properly, inc turn echo back on!
-#         SetAngle(90)
-#         curses.nocbreak(); screen.keypad(0); curses.echo()
-#         curses.endwin()
-#         GPIO.cleanup()
+    def move_backward(self, speed=100):
+        GPIO.output(self.in1, GPIO.HIGH)
+        GPIO.output(self.in2, GPIO.LOW)
+        self.pwm.ChangeDutyCycle(speed)
 
+    def stop(self):
+        GPIO.output(self.in1, GPIO.LOW)
+        GPIO.output(self.in2, GPIO.LOW)
+        self.pwm.ChangeDutyCycle(0)
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'zaq1@WSX'
-socketio = SocketIO(app,cors_allowed_origins='*')
-robot = Robot()
+socketio = SocketIO(app, cors_allowed_origins='*')
+# robot = Robot()
+
+motor_a = Motor(2, 3, 4)
+motor_b = Motor(17, 27, 22)
+
+IP_ADDRESS = '192.168.43.101'
+PORT = 5000
+
 
 @socketio.on('message')
 def message(msg):
-    print('Message : '+ msg)
+    print('Message : ' + msg)
     send(msg, broadcast=True)
     if msg == 'up':
-        # GPIO.output(motor1a,GPIO.HIGH)
-        # GPIO.output(motor1b,GPIO.LOW)
-        # GPIO.output(motor2a,GPIO.LOW)
-        # GPIO.output(motor2b,GPIO.HIGH)
-        robot.goStreight()
-        
+        motor_a.move_forward()
+        motor_b.move_forward()
+
     elif msg == 'back':
-        # GPIO.output(motor1a,GPIO.LOW)
-        # GPIO.output(motor1b,GPIO.HIGH)
-        # GPIO.output(motor2a,GPIO.HIGH)
-        # GPIO.output(motor2b,GPIO.LOW)
-        robot.goBackwards()
+        motor_a.move_backward()
+        motor_b.move_backward()
 
     elif msg == 'right':
-        # GPIO.output(motor1a,GPIO.HIGH)
-        # GPIO.output(motor1b,GPIO.LOW)
-        # GPIO.output(motor2a,GPIO.HIGH)
-        # GPIO.output(motor2b,GPIO.LOW)
-        robot.turnRight()
+        motor_a.move_backward()
+        motor_b.move_forward()
 
     elif msg == 'left':
-        # GPIO.output(motor1a,GPIO.LOW)
-        # GPIO.output(motor1b,GPIO.HIGH)
-        # GPIO.output(motor2a,GPIO.LOW)
-        # GPIO.output(motor2b,GPIO.HIGH)
-        robot.turnLeft()
+        motor_a.move_forward()
+        motor_b.move_backward()
 
     elif msg == 'stop':
-        # GPIO.output(21, True)
-        # pwm.ChangeDutyCycle(0)
-        # GPIO.output(motor1a,GPIO.LOW)
-        # GPIO.output(motor1b,GPIO.LOW)
-        # GPIO.output(motor2a,GPIO.LOW)
-        # GPIO.output(motor2b,GPIO.LOW)
-        robot.stop()
+        motor_a.stop()
+        motor_b.stop()
+
 
 @app.route('/', methods=["GET"])
 def client():
-    # return "HI"
     return render_template('index.html')
 
 
 if __name__ == '__main__':
     # app.run()
-    socketio.run(app)
-    while True:
-        pass
+    socketio.run(app, host=IP_ADDRESS,port=PORT)
